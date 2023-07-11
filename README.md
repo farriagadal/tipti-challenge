@@ -4,6 +4,10 @@
 
 Prueba tecnica, la cual consiste en un sistema de reserva de hoteles. Cada hotel tiene tarifas separadas para días de semana y fines de semana, con tarifas especiales para clientes vip.
 
+## Funcionamiento
+
+En el sistema, se puede seleccionar el tipo de cliente (regular o de recompensas) y las fechas de interés. Posteriormente, se puede visualizar en cada tarjeta de hotel el precio que se pagaría en cada uno. Además, se muestra una etiqueta de "recomendado" en el hotel que sea más conveniente en términos de precio y clasificación.
+
 ## Cómo comenzar
 
 Es necesario tener Node.js y npm (versiones recomendadas: v18 y v9.8 respectivamente).
