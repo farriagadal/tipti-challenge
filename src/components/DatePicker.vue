@@ -1,15 +1,17 @@
 <template>
-  <div>
+  <h2>Selecciona las fechas</h2>
+  <div class="date-picker">
     <input
+      class="date-picker__input"
       type="date"
       v-model="selectedDate"
     />
-    <button @click="updateDates">Update Dates</button>
+    <button class="date-picker__button" @click="updateDates">Aplicar</button>
   </div>
-  <div>
-    <template v-for="date in dates">
-      {{ date }}
-    </template>
+  <div v-if="dates.length" class="dates-display">
+    <div v-for="(date, index) in dates" class="dates-display__date" :key="index">
+      {{ new Date(date).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })  }}
+    </div>
   </div>
 </template>
 
@@ -42,3 +44,58 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss" scoped>
+$date-picker-bg: #f6f8fa;
+$button-bg: #2196f3;
+$border-color: #ddd;
+
+.date-picker {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  width: 300px;
+  margin: 0 auto;
+  padding: 10px;
+  border-radius: 10px;
+  background: $date-picker-bg;
+  box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+
+  &__input {
+    width: 70%;
+    padding: 10px;
+    border: 1px solid $border-color;
+    border-radius: 5px;
+  }
+
+  &__button {
+    width: 150px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: $button-bg;
+    color: #fff;
+    cursor: pointer;
+  }
+}
+
+.dates-display {
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 10px;
+  background: $date-picker-bg;
+  box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+  max-width: 300px;
+  margin: auto;
+
+  &__date {
+    padding: 5px;
+    border-bottom: 1px solid $border-color;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+</style>

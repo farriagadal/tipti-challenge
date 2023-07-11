@@ -1,4 +1,5 @@
 <template>
+  <h2>Hoteles</h2>
   <div class="hotel-list">
     <HotelCard
       v-for="hotel in hotels"
@@ -60,11 +61,13 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+h2 {
+  margin-top: 60px;
+}
 .hotel-list {
   display: flex;
   margin: auto;
   width: fit-content;
   gap: 40px;
-  margin-top: 70px;
 }
 </style>

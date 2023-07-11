@@ -92,10 +92,11 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .hotel-card {
-  border: solid 1px #ccc;
-  border-radius: 4px;
-  padding: 10px;
+  padding: 20px;
   margin-bottom: 10px;
   cursor: pointer;
+  border-radius: 10px;
+  background: #f6f8fa;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 </style>
