@@ -10,4 +10,5 @@ export interface Hotel {
     rewards: number
   },
   finalPrice?: number
+  recommended?: boolean
 }

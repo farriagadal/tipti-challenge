@@ -1,11 +1,10 @@
 <template>
-  <h2>Hoteles</h2>
+  <h2>Hoteles disponibles</h2>
   <div class="hotel-list">
     <HotelCard
-      v-for="hotel in hotels"
+      v-for="hotel in newHotels"
       :key="hotel.name"
       :hotel="hotel"
-      :lowestPrice="lowestPrice"
       @select="$emit('select', $event)"
     />
   </div>
@@ -31,9 +30,10 @@ export default defineComponent({
       return store.state.hotel.dates
     })
 
-    // Calcular el precio final para cada hotel y almacenarlo en el objeto del hotel
+    // Se calcula el precio final para cada hotel y almacenarlo en el objeto del hotel
 
-    const lowestPrice = computed(() => {
+    const newHotels = computed(() => {
+      const array = []
       for (const hotel of hotels) {
         const rates = customerType.value === 'rewards' ? 'rewards' : 'regular'
         let totalPrice = 0
@@ -47,14 +47,27 @@ export default defineComponent({
           }
         }
         hotel.finalPrice = totalPrice
+        array.push(hotel)
       }
-      // Usar la función Math.min para encontrar el precio más bajo de todos los hoteles
-      return Math.min(...hotels.map((hotel: any) => hotel.finalPrice))
+
+      // Se selecciona el hotel recomendado con menor precio final y mejor rating
+      let bestHotel = array[0]
+      for (const hotel of array) {
+        hotel.recommended = false
+        if (hotel.finalPrice < bestHotel.finalPrice) {
+          bestHotel = hotel
+        } else if (hotel.finalPrice === bestHotel.finalPrice) {
+          if (hotel.rating > bestHotel.rating) {
+            bestHotel = hotel
+          }
+        }
+      }
+      bestHotel.recommended = true
+      return array
     })
 
     return {
-      hotels,
-      lowestPrice
+      newHotels
     }
   }
 })
@@ -63,11 +76,16 @@ export default defineComponent({
 <style scoped lang="scss">
 h2 {
   margin-top: 60px;
+  margin-bottom: 50px;
 }
 .hotel-list {
   display: flex;
   margin: auto;
   width: fit-content;
   gap: 40px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 }
 </style>

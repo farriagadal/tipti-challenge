@@ -1,17 +1,11 @@
 <template>
   <div class="hotel-card">
-    <h2 class="hotel-name">{{ hotel.name }}</h2>
-    <div class="hotel-rating">
+    <h2 class="hotel-card__name">{{ hotel.name }}</h2>
+    <div class="hotel-card__rating">
       <span v-for="star in hotel.rating" :key="star" class="star">★</span>
     </div>
-    <!-- {{ dates }} -->
-
-    <div v-if="customerType && hasDates" class="hotel-final-price">
-      Precio final: ${{ finalPrice }}
-    </div>
-    {{ lowestPrice && lowestPrice === finalPrice ? 'Cheapest' : '' }}
-    <div class="hotel-rates">
-      <div v-if="!hasDates || !isWeekend">
+    <div class="hotel-card__rates">
+      <div v-if="!hasDates || isWeek">
         <h3>Tarifas entre semana:</h3>
         <p v-if="!customerType || customerType === 'regular'">
           Regular: ${{ hotel.weekdayRates.regular }}
@@ -30,6 +24,10 @@
         </p>
       </div>
     </div>
+    <div v-if="customerType && hasDates" class="hotel-card__price">
+      Precio final: ${{ hotel.finalPrice }}
+      <label v-if="hotel.recommended">{{ hotel.recommended ? 'Recomendado' : '' }}</label>
+    </div>
   </div>
 </template>
 
@@ -44,13 +42,9 @@ export default defineComponent({
     hotel: {
       type: Object as () => Hotel,
       required: true
-    },
-    lowestPrice: {
-      type: Number,
-      required: true
     }
   },
-  setup (props) {
+  setup () {
     const store = useStore()
     const customerType = computed(() => store.state.hotel.customerType)
 
@@ -62,21 +56,6 @@ export default defineComponent({
       return store.state.hotel.dates
     })
 
-    const finalPrice = computed(() => {
-      const rates = customerType.value === 'rewards' ? 'rewards' : 'regular'
-      let totalPrice = 0
-      for (const dateString of dates.value) {
-        const date = new Date(dateString)
-        const day = date.getDay()
-        if (day === 5 || day === 6) { // si es fin de semana
-          totalPrice += props.hotel.weekendRates[rates]
-        } else { // si es día de la semana
-          totalPrice += props.hotel.weekdayRates[rates]
-        }
-      }
-      return totalPrice
-    })
-
     const isWeekend = computed(() => {
       return store.state.hotel.dates.some((dateString: string) => {
         const date = new Date(dateString)
@@ -85,18 +64,55 @@ export default defineComponent({
       })
     })
 
-    return { customerType, isWeekend, hasDates, dates, finalPrice }
+    const isWeek = computed(() => {
+      return store.state.hotel.dates.some((dateString: string) => {
+        const date = new Date(dateString)
+        const day = date.getDay()
+        return day !== 5 && day !== 6 // 0 es domingo, 6 es sábado
+      })
+    })
+
+    return { customerType, isWeekend, isWeek, hasDates, dates }
   }
 })
 </script>
 
 <style lang="scss" scoped>
 .hotel-card {
-  padding: 20px;
+  padding: 20px 50px;
+  padding-bottom: 0;
   margin-bottom: 10px;
   cursor: pointer;
-  border-radius: 10px;
   background: #f6f8fa;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+
+  &__rating {
+    color: rgb(195, 166, 52);
+  }
+
+  &__rates {
+    padding-bottom: 20px;
+  }
+
+  &__price {
+    background: #000;
+    color: #fff;
+    padding: 20px;
+    margin: 0 -50px;
+    margin-top: 20px;
+    font-size: 17px;
+    letter-spacing: 1px;
+
+    label {
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #000;
+      color: #fff;
+      padding: 5px 10px;
+    }
+  }
 }
 </style>
