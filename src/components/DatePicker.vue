@@ -2,29 +2,43 @@
   <div>
     <input
       type="date"
-      v-model="selectedDates"
-      multiple
+      v-model="selectedDate"
     />
     <button @click="updateDates">Update Dates</button>
+  </div>
+  <div>
+    <template v-for="date in dates">
+      {{ date }}
+    </template>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import { useStore } from 'vuex'
 
 export default defineComponent({
   name: 'DatePicker',
   setup () {
     const store = useStore()
-    const selectedDates = ref([])
+    const selectedDate = ref('')
+
+    const dates = computed(() => {
+      return store.state.hotel.dates
+    })
 
     const updateDates = () => {
-      console.log(selectedDates.value)
-      store.commit('updateDates', selectedDates.value)
+      if (!selectedDate.value) {
+        store.commit('updateDates', [])
+        return
+      }
+      const selectedDateISO = new Date(selectedDate.value).toISOString()
+      if (!store.state.hotel.dates.includes(selectedDateISO)) {
+        store.commit('updateDates', [...store.state.hotel.dates, selectedDateISO])
+      }
     }
 
-    return { selectedDates, updateDates }
+    return { selectedDate, updateDates, dates }
   }
 })
 </script>

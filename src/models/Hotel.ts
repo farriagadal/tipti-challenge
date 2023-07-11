@@ -8,5 +8,6 @@ export interface Hotel {
   weekendRates: {
     regular: number
     rewards: number
-  }
+  },
+  finalPrice?: number
 }

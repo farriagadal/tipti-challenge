@@ -9,6 +9,7 @@
     <div v-if="customerType && hasDates" class="hotel-final-price">
       Precio final: ${{ finalPrice }}
     </div>
+    {{ lowestPrice && lowestPrice === finalPrice ? 'Cheapest' : '' }}
     <div class="hotel-rates">
       <div v-if="!hasDates || !isWeekend">
         <h3>Tarifas entre semana:</h3>
@@ -42,6 +43,10 @@ export default defineComponent({
   props: {
     hotel: {
       type: Object as () => Hotel,
+      required: true
+    },
+    lowestPrice: {
+      type: Number,
       required: true
     }
   },

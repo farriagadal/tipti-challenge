@@ -39,10 +39,10 @@ export default {
     hotels: hotelsData
   } as State,
   mutations: {
-    updateDates (state: State, date: Date) {
-      console.log('updateDates', date)
-      if (date) {
-        state.dates = [date]
+    updateDates (state: State, dates: Date[]) {
+      console.log('updateDates', dates)
+      if (dates.length > 0 || dates) {
+        state.dates = dates
       } else {
         state.dates = []
       }
