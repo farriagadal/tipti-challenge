@@ -10,7 +10,7 @@
   </div>
   <div v-if="dates.length" class="dates-display">
     <div v-for="(date, index) in dates" class="dates-display__date" :key="index">
-      {{ new Date(date).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })  }}
+      {{  getDate(date)  }}
     </div>
   </div>
 </template>
@@ -40,7 +40,24 @@ export default defineComponent({
       }
     }
 
-    return { selectedDate, updateDates, dates }
+    const getDate = (date: string) => {
+      // desfase horario en minutos.
+      const timezoneOffsetMinutes = new Date().getTimezoneOffset()
+
+      // desfase horario en milisegundos.
+      const timezoneOffsetMilliseconds = timezoneOffsetMinutes * 60 * 1000
+
+      // fecha en base a la fecha ISO y compensa el desfase horario.
+      const localDate = new Date(new Date(date).getTime() + timezoneOffsetMilliseconds)
+
+      const year = localDate.getFullYear()
+      const month = localDate.getMonth() + 1 // Los meses en JavaScript son 0-indexados.
+      const day = localDate.getDate()
+
+      return `${day}/${month}/${year}`
+    }
+
+    return { selectedDate, updateDates, dates, getDate }
   }
 })
 </script>
