@@ -1,14 +1,8 @@
 import { createStore } from 'vuex'
+import hotel from './hotel.module'
 
 export default createStore({
-  state: {
-  },
-  getters: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
   modules: {
+    hotel
   }
 })

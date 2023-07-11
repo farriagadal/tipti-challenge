@@ -1,4 +1,3 @@
-import { Module } from 'vuex'
 import { Hotel } from '../models/Hotel'
 
 export interface HotelState {
@@ -27,11 +26,27 @@ const hotelsData: Hotel[] = [
   }
 ]
 
-const hotelModule: Module<HotelState, unknown> = {
-  state: () => ({ hotels: hotelsData }),
-  mutations: {},
+interface State {
+  dates: Date[];
+  customerType: string | null;
+  hotels: Hotel[];
+}
+
+export default {
+  state: {
+    dates: [],
+    customerType: null,
+    hotels: hotelsData
+  } as State,
+  mutations: {
+    updateDates (state: State, date: Date) {
+      console.log('updateDates', date)
+      state.dates = [date]
+    },
+    updateCustomerType (state: State, type: string) {
+      state.customerType = type
+    }
+  },
   actions: {},
   getters: {}
 }
-
-export default hotelModule
