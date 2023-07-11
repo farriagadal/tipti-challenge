@@ -1,18 +1,30 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+    <h1>Reserva de hoteles</h1>
+    <CustomerToggle />
+    <DatePicker />
+    <HotelList />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import HelloWorld from '@/components/HelloWorld.vue' // @ is an alias to /src
+import CustomerToggle from '../components/CustomerToggle.vue'
+import DatePicker from '../components/DatePicker.vue'
+import HotelList from '../components/HotelList.vue'
 
 export default defineComponent({
   name: 'HomeView',
   components: {
-    HelloWorld
+    CustomerToggle,
+    DatePicker,
+    HotelList
   }
 })
 </script>
+
+<style scoped lang="scss">
+.home {
+  //
+}
+</style>

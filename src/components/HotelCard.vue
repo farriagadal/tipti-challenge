@@ -1,26 +1,35 @@
 <template>
-  <div class="hotel-card" @click="selectHotel">
+  <div class="hotel-card">
     <h2 class="hotel-name">{{ hotel.name }}</h2>
     <div class="hotel-rating">
       <span v-for="star in hotel.rating" :key="star" class="star">★</span>
     </div>
     <div class="hotel-rates">
-      <div>
+      <div v-if="!isWeekend">
         <h3>Tarifas entre semana:</h3>
-        <p>Regular: ${{ hotel.weekdayRates.regular }}</p>
-        <p>Rewards: ${{ hotel.weekdayRates.rewards }}</p>
+        <p v-if="!customerType || customerType === 'regular'">
+          Regular: ${{ hotel.weekdayRates.regular }}
+        </p>
+        <p v-if="!customerType || customerType === 'rewards'">
+          Rewards: ${{ hotel.weekdayRates.rewards }}
+        </p>
       </div>
-      <div>
+      <div v-else>
         <h3>Tarifas de fin de semana:</h3>
-        <p>Regular: ${{ hotel.weekendRates.regular }}</p>
-        <p>Rewards: ${{ hotel.weekendRates.rewards }}</p>
+        <p v-if="!customerType || customerType === 'regular'">
+          Regular: ${{ hotel.weekendRates.regular }}
+        </p>
+        <p v-if="!customerType || customerType === 'rewards'">
+          Rewards: ${{ hotel.weekendRates.rewards }}
+        </p>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
+import { useStore } from 'vuex'
 import { Hotel } from '../models/Hotel'
 
 export default defineComponent({
@@ -31,10 +40,19 @@ export default defineComponent({
       required: true
     }
   },
-  methods: {
-    selectHotel () {
-      this.$emit('select', this.hotel.name)
-    }
+  setup () {
+    const store = useStore()
+    const customerType = computed(() => store.state.hotel.customerType)
+
+    const isWeekend = computed(() => {
+      return store.state.hotel.dates.some((dateString: string) => {
+        const date = new Date(dateString)
+        const day = date.getDay()
+        return day === 5 || day === 6 // 0 es domingo, 6 es sábado
+      })
+    })
+
+    return { customerType, isWeekend }
   }
 })
 </script>
