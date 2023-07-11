@@ -6,7 +6,7 @@
       type="date"
       v-model="selectedDate"
     />
-    <button class="date-picker__button" @click="updateDates">Aplicar</button>
+    <button class="date-picker__button" @click="updateDates">APLICAR</button>
   </div>
   <div v-if="dates.length" class="dates-display">
     <div v-for="(date, index) in dates" class="dates-display__date" :key="index">
@@ -47,7 +47,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 $date-picker-bg: #f6f8fa;
-$button-bg: #2196f3;
+$button-bg: #000000;
 $border-color: #ddd;
 
 .date-picker {
@@ -57,7 +57,6 @@ $border-color: #ddd;
   width: 300px;
   margin: 0 auto;
   padding: 10px;
-  border-radius: 10px;
   background: $date-picker-bg;
   box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
 
@@ -65,14 +64,12 @@ $border-color: #ddd;
     width: 70%;
     padding: 10px;
     border: 1px solid $border-color;
-    border-radius: 5px;
   }
 
   &__button {
     width: 150px;
     padding: 10px;
     border: none;
-    border-radius: 5px;
     background-color: $button-bg;
     color: #fff;
     cursor: pointer;
@@ -82,7 +79,6 @@ $border-color: #ddd;
 .dates-display {
   margin-top: 20px;
   padding: 10px;
-  border-radius: 10px;
   background: $date-picker-bg;
   box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
   max-width: 300px;

@@ -3,6 +3,16 @@
     <h2>Tipo de cliente</h2>
     <div class="radio-wrapper">
       <label class="radio-container">
+        Sin seleccionar
+        <input
+          name="customerType"
+          type="radio"
+          :value="null"
+          v-model="internalValue"
+        />
+        <span class="checkmark"></span>
+      </label>
+      <label class="radio-container">
         Regular
         <input
           name="customerType"
@@ -18,16 +28,6 @@
           name="customerType"
           type="radio"
           value="rewards"
-          v-model="internalValue"
-        />
-        <span class="checkmark"></span>
-      </label>
-      <label class="radio-container">
-        None
-        <input
-          name="customerType"
-          type="radio"
-          :value="null"
           v-model="internalValue"
         />
         <span class="checkmark"></span>
@@ -84,7 +84,7 @@ export default defineComponent({
       width: 0;
 
       &:checked ~ .checkmark {
-        background-color: #2196F3;
+        background-color: #000000;
         &:after {
           display: block;
         }
