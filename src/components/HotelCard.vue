@@ -4,8 +4,13 @@
     <div class="hotel-rating">
       <span v-for="star in hotel.rating" :key="star" class="star">★</span>
     </div>
+    <!-- {{ dates }} -->
+
+    <div v-if="customerType && hasDates" class="hotel-final-price">
+      Precio final: ${{ finalPrice }}
+    </div>
     <div class="hotel-rates">
-      <div v-if="!isWeekend">
+      <div v-if="!hasDates || !isWeekend">
         <h3>Tarifas entre semana:</h3>
         <p v-if="!customerType || customerType === 'regular'">
           Regular: ${{ hotel.weekdayRates.regular }}
@@ -14,7 +19,7 @@
           Rewards: ${{ hotel.weekdayRates.rewards }}
         </p>
       </div>
-      <div v-else>
+      <div v-if="!hasDates || isWeekend">
         <h3>Tarifas de fin de semana:</h3>
         <p v-if="!customerType || customerType === 'regular'">
           Regular: ${{ hotel.weekendRates.regular }}
@@ -40,9 +45,32 @@ export default defineComponent({
       required: true
     }
   },
-  setup () {
+  setup (props) {
     const store = useStore()
     const customerType = computed(() => store.state.hotel.customerType)
+
+    const hasDates = computed(() => {
+      return store.state.hotel.dates.length > 0
+    })
+
+    const dates = computed(() => {
+      return store.state.hotel.dates
+    })
+
+    const finalPrice = computed(() => {
+      const rates = customerType.value === 'rewards' ? 'rewards' : 'regular'
+      let totalPrice = 0
+      for (const dateString of dates.value) {
+        const date = new Date(dateString)
+        const day = date.getDay()
+        if (day === 5 || day === 6) { // si es fin de semana
+          totalPrice += props.hotel.weekendRates[rates]
+        } else { // si es día de la semana
+          totalPrice += props.hotel.weekdayRates[rates]
+        }
+      }
+      return totalPrice
+    })
 
     const isWeekend = computed(() => {
       return store.state.hotel.dates.some((dateString: string) => {
@@ -52,7 +80,7 @@ export default defineComponent({
       })
     })
 
-    return { customerType, isWeekend }
+    return { customerType, isWeekend, hasDates, dates, finalPrice }
   }
 })
 </script>

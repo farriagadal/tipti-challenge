@@ -41,7 +41,11 @@ export default {
   mutations: {
     updateDates (state: State, date: Date) {
       console.log('updateDates', date)
-      state.dates = [date]
+      if (date) {
+        state.dates = [date]
+      } else {
+        state.dates = []
+      }
     },
     updateCustomerType (state: State, type: string) {
       state.customerType = type
