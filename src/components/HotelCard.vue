@@ -49,7 +49,7 @@ export default defineComponent({
     const customerType = computed(() => store.state.hotel.customerType)
 
     const hasDates = computed(() => {
-      return store.state.hotel.dates.length > 0
+      return store.state.hotel.dates?.length > 0
     })
 
     const dates = computed(() => {
